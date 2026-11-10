@@ -1,0 +1,872 @@
+<RootWidget>:
+    
+<TreeViewScreen>:
+    
+    canvas.before:
+        Color:
+            rgba:  .94, .97, 1, 1 ## Alice Blue
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        
+        Label:
+            text: "Hello! carry your Notes anywhere."
+            font_size: '24sp'
+            color: .52, 0.80, .92, 1 ## Sky Blue
+    
+    
+    
+<MyTree>:
+    root_options:{  'text': 'Tree'} 
+    
+<TreeViewNode>:
+    color_selected: .52, 0.80, .92, 1 ## Sky Blue
+    even_color: .94, 1, 1,1 ## Azure
+    odd_color: 
+
+<TreeViewLabel>:
+    node_key: ""
+    color: 0,0,0, 1
+## On touch down on only the root node open the first popup
+    on_touch_down: 
+        if self.collide_point(*args[1].pos):app.root.first_popup_open() 
+                      
+<MyTreeViewLabel>:
+    node_key: ""
+    color: 0,0,0, 1    
+    on_touch_down: 
+        if self.collide_point(*args[1].pos):app.root.first_popup_open() 
+
+<MyClickableLabel>:
+    node_key: ""
+    text_size: self.width, None
+    height: dp(24)
+    color: 0,0,0, 1
+   ## On touch down change the screen to tabscreen and load the data 
+    on_touch_down: 
+        if self.collide_point(*args[1].pos):app.root.current ='tabscreen' 
+        if self.collide_point(*args[1].pos):app.root.load_data_when_clicked()
+
+<MyInfoPopup>:
+    id : info_pop_id
+    title : 'Info Label...'
+    title_color : 1, .96, .92, 1
+    size_hint :( .4, .2)
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness
+    content: 
+    BoxLayout:
+        orientation : 'vertical'
+    
+        Label:
+            size_hint : 1,1
+            text : 'To add a level click on the root node. You can add upto 3 levels and maximum 10 nodes.'
+            text_size: self.size
+            size : self.texture_size
+            halign : 'left'
+            valign : 'center'
+            color : .94, .97, 1, 1 ## Alice Blue
+            shorten :  True
+
+<MyTouchableLabel>:
+   
+<Label>:
+    color : 0,0,0,1    
+<MyLabel>:
+    color: .94, .97, 1, 1 ## Alice Blue
+   
+
+        
+<MyTextInputNode>:
+    text: ''
+    multiline: False
+    foreground_color:0,0,0,1
+    hint_text: 'Enter name here'
+    read_only: False 
+
+<MyFirstPopup>:
+    id: pop
+    title:'Add / Edit / Delete a Node'
+    title_color:  1, .96, .92, 1   
+    size_hint: .3,.2
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness    
+    content:
+    GridLayout:
+        rows:1    
+        MyTouchableLabel:
+            
+            rows:1
+            cols: 1
+            text: 'Add...'
+            color: .94, .97, 1, 1 ## Alice Blue
+            on_touch_down:
+                if self.collide_point(*args[1].pos):app.root.open_add_node_popup()
+            
+        MyTouchableLabel:
+            rows:1        
+            text: 'Edit...'
+            color: .94, .97, 1, 1 ## Alice Blue 
+            on_touch_down:
+                if self.collide_point(*args[1].pos):app.root.open_edit_node_popup() 
+        MyTouchableLabel:
+            rows:1
+            text: 'Delete...'
+            color:.94, .97, 1, 1 ## Alice Blue          
+            on_touch_down:
+                if self.collide_point(*args[1].pos):app.root.open_delete_node_popup()                    
+<MyEditedNodePopup>:
+    id: editpop
+    title: 'Edit the node label...'
+    
+      
+    title_color:  1, .96, .92, 1     
+    size_hint: .4,.2
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness  
+    content:
+    GridLayout:
+       
+        rows: 2
+        BoxLayout:
+            MyLabel:     
+                cols:1
+                rows:1
+                
+                text: 'Name'
+                size_hint_x : .25
+                
+            MyTextInputNode:
+                id: input
+                cols:2
+                rows:1
+                
+                
+                multiline: False
+                size_hint_x : 1
+        BoxLayout:
+            MyTouchableLabel:
+                cols:1
+                rows:2
+                
+                text: 'Change'
+                on_touch_down:
+                    if self.collide_point(*args[1].pos):app.root.edit_node_label()
+                
+                
+            MyTouchableLabel:
+                cols:2
+                rows:2
+                
+                text: 'Cancel'
+                on_touch_down:
+                    if self.collide_point(*args[1].pos):app.root.cancel_edited_node_popup()        
+        
+<MyAddNodePopup>:
+    title: 'Add a Node...'
+    title_color:  1, .96, .92, 1       
+    size_hint: .4,.2
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness  
+    content:
+    GridLayout:
+        
+        rows: 2
+        BoxLayout:
+            MyLabel:     
+                cols:1
+                rows:1
+                
+                text: 'Name'
+                size_hint_x : .25
+                
+            MyTextInputNode:
+                id: input
+                cols:2
+                rows:1
+                hint_text : 'Please ensure to give a unique name...'
+                font_size : '14sp'
+                multiline: False
+                size_hint_x : 1
+                
+        BoxLayout:
+            MyTouchableLabel:
+                cols:1
+                rows:2
+                
+                text: 'Add'
+                on_touch_down:
+                    if self.collide_point(*args[1].pos):app.root.add_node_level()
+                
+                
+            MyTouchableLabel:
+                cols:2
+                rows:2
+                
+                text: 'Cancel'
+                on_touch_down:
+                    if self.collide_point(*args[1].pos):app.root.cancel_myadd_node_popup()
+                                
+<MyDeleteNodePopup>:
+    title:'Deleting the node will delete all the data associated with it'
+    title_color:  1, .96, .92, 1       
+    size_hint: .4,.2 
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness    
+    content:
+    GridLayout:
+        cols:2
+        rows:1        
+        MyTouchableLabel:
+            cols:1
+            rows:1
+            text: 'Ok, delete the node.'
+            on_touch_down:
+                if self.collide_point(*args[1].pos):app.root.delete_node()
+        MyTouchableLabel:
+            cols:2
+            rows:1
+            text: 'No, cancel.'
+            on_touch_down:
+                if self.collide_point(*args[1].pos):app.root.cancel_delete_node_popup()
+
+<MyRootDeleteNodePopup>:
+    title:'You can not delete the root node.'
+    title_color: 1, .96, .92, 1       
+    size_hint: .4,.2 
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness    
+    content:
+    GridLayout:
+        cols:2
+        rows:1        
+        MyTouchableLabel:
+            cols:1
+            rows:1
+            text: 'Ok.'
+            on_touch_down:
+                if self.collide_point(*args[1].pos):app.root.root_delete_popup_cancel()
+<MyPackLabel>:
+    canvas.before : 
+        Color:
+            rgba :  .372, .619, .627,1
+        Rectangle :
+            pos : self.pos
+            size : self.size
+<MyTabTextInput>:
+    id : mytabtextinput    
+    text: ''
+    multiline : True
+    hint_text: 'To edit the page click the Edit button.\nAfter editing click the Save button.\nTo insert an image click the Image button.'
+    cursor_color: [0, 0, 1, 1]          # Custom cursor color so it stays visible
+    foreground_color: [1, 1, 1, 0]
+    background_color: [0, 0, 0, 0]      # Complete transparency (RGBA)
+    background_normal: ''               # Disables default unselected background image
+    background_active: ''  
+    
+    
+    padding: [100, 100, 100, 100] 
+      
+   
+<MyTabButton>:     
+    background_normal : ''
+    background_color : (.941, .973, 1,1) if self.state == 'down' else (.372, .619, .627,1)
+    color : 0,0,0,1
+    size_hint_y : None
+    height : 75
+<MyTabLabel>: 
+   
+
+    canvas.before:
+        Color:
+            rgba : 1,1,1,1
+        Rectangle:
+            pos : self.pos
+            size : self.size
+    markup: True
+    text_size: self.size 
+    color : 0,0,0,1
+    halign: 'left'
+    valign: 'top'
+    pos_hint: {'x': 0, 'y': 0}
+    size_hint : 1,1
+    padding: [100, 100, 100, 100]
+<TabScreen>: 
+    id : tabscreen_id
+   
+       
+   
+
+<MyTabbedPanelItem>:
+    background_color : (.941, .973, 1,1) if self.state == 'down' else (.52, 0.80, .92, 1)
+    background_normal : ''
+    background_down : ''
+   
+    
+    
+    
+<MyTabbedPanelHeader>:
+   
+    
+
+   
+    
+<MyTabbedPanelStrip>:
+<StripLayout>:
+    ##padding: [100, 0, 100, 0]
+    ##border: [0, 0, 0, 0] 
+<MyTabTouchableLabel>:
+    canvas.before : 
+        Color:
+            rgba :  .372, .619, .627,1
+        RoundedRectangle :
+            pos : self.pos
+            size : self.size
+            radius: [15,]
+<MyLowerTabBoxLayout>:
+    canvas.before:
+        Color:
+            rgba : .94, .97, 1, 1 ## Alice Blue
+        Rectangle :
+            pos : self.pos
+            size : self.size
+    
+
+<MyTabbedPanel>:
+   
+    do_default_tab: False
+    size_hint_x : 1
+    tab_width : self.width / len(self.tab_list) if self.tab_list else 100
+    strip_image : ''
+    ##strip_border: 2,2,2,2
+    tab_height :100
+    
+   
+    MyTabbedPanelItem: 
+        id: tab1
+        markup : True
+        text: '[b][color=#f08080] Page [/color][/b] \n [color=#008b8b] - 1 - [/color]'
+        ##color : 0,0,0,1 
+    
+        MyTabMainBoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                id: box2
+                size_hint: (1,.9) 
+                FloatLayout:
+                    MyTabLabel:
+                        
+    
+                        id: mylabel_1
+                        text : textinput1.text
+                       
+                        on_ref_press: app.root.open_link(*args)
+                        
+                    MyTabTextInput:
+                        id: textinput1 
+                        pos_hint: mylabel_1.pos_hint
+                        size_hint : mylabel_1.size_hint
+                        
+                        on_touch_down :  if self.collide_point(*args[1].pos) : app.root.toggle_lower_box(mylowertabbox1)
+                        on_touch_down :  if self.collide_point(*args[1].pos):app.root.toggle_header()
+
+            MyLowerTabBoxLayout:
+                id : mylowertabbox1
+                orientation: 'horizontal'
+                size_hint_y : None
+                height : 75
+                
+                MyPackLabel:
+
+                MyTabTouchableLabel:
+                    
+                    id : tabbutnread
+                    text: 'Read'
+                    
+                    color: .94, .97, 1, 1 ## Alice Blue
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.read_data_back()
+                    
+                
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Insert an Image...'
+                    background_normal : ''
+                    color: .94, .97, 1, 1 ## Alice Blue
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.fc_popup(textinput1 )
+
+                MyTabTouchableLabel:
+                    id : tabbtnedit
+                    text: 'Edit'
+                    background_normal : ''
+                    color: .94, .97, 1, 1 ## Alice Blue
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos): app.root.save_data_after_editing(self)
+                MyPackLabel:
+                            
+                
+                
+      
+    MyTabbedPanelItem:
+        id: tab2
+        
+        markup : True
+        text: '[b][color=#f08080] Page [/color][/b] \n [color=#008b8b] - 2 - [/color]'
+        color : 0,0,0,1
+        
+        MyTabMainBoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                id: box2
+                size_hint: (1,.9) 
+                FloatLayout:
+                    MyTabLabel:
+                        id: mylabel_2
+                        text : textinput2.text
+                        on_ref_press: app.root.open_link(*args)
+                    MyTabTextInput:
+                        id: textinput2
+                        pos_hint: mylabel_2.pos_hint
+                        size_hint : mylabel_2.size_hint
+                        
+                        on_touch_down :  if self.collide_point(*args[1].pos) : app.root.toggle_lower_box(mylowertabbox2)
+                        on_touch_down :  if self.collide_point(*args[1].pos):app.root.toggle_header()
+            MyLowerTabBoxLayout:
+                id : mylowertabbox2
+                orientation: 'horizontal'
+                size_hint_y : None
+                height : 75
+
+                MyPackLabel:
+
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Read'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.read_data_back()
+                    
+                
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Insert an Image...'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.fc_popup(textinput2 )
+
+                MyTabTouchableLabel:
+                    id : tabbtnedit
+                    text: 'Edit'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos): app.root.save_data_after_editing(self)
+                
+                MyPackLabel:
+                
+          
+                
+    MyTabbedPanelItem:
+        id: tab3
+        markup : True
+        text: '[b][color=#f08080] Page [/color][/b] \n [color=#008b8b] - 3 - [/color]'
+        color : 0,0,0,1
+        
+        MyTabMainBoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint: (1,.9) 
+                FloatLayout:
+                    MyTabLabel:
+                        id: mylabel_3
+                        text : textinput3.text
+                        on_ref_press: app.root.open_link(*args)
+                    MyTabTextInput:
+                        id: textinput3
+                        pos_hint: mylabel_3.pos_hint
+                        size_hint : mylabel_3.size_hint
+                        on_touch_down :  if self.collide_point(*args[1].pos) : app.root.toggle_lower_box(mylowertabbox3)
+                        on_touch_down :  if self.collide_point(*args[1].pos):app.root.toggle_header()
+            MyLowerTabBoxLayout:
+                id : mylowertabbox3
+                orientation: 'horizontal'
+                size_hint_y : None
+                height : 75
+
+                MyPackLabel:
+
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Read'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.read_data_back()
+                    
+                
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Insert an Image...'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.fc_popup(textinput3 )
+
+                MyTabTouchableLabel:
+                    id : tabbtnedit
+                    text: 'Edit'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos): app.root.save_data_after_editing(self)
+
+                MyPackLabel:
+            
+    MyTabbedPanelItem:
+        id: tab4
+
+        markup : True
+        text: '[b][color=#f08080] Page [/color][/b] \n [color=#008b8b] - 4 - [/color]'
+        color : 0,0,0,1
+        
+        MyTabMainBoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint: (1,.9) 
+                FloatLayout:
+                    MyTabLabel:
+                        id: mylabel_4
+                        text : textinput4.text
+                        on_ref_press: app.root.open_link(*args)
+                    MyTabTextInput:
+                        id: textinput4
+                        pos_hint: mylabel_4.pos_hint
+                        size_hint : mylabel_4.size_hint
+                        on_touch_down :  if self.collide_point(*args[1].pos) : app.root.toggle_lower_box(mylowertabbox4)
+                        on_touch_down :  if self.collide_point(*args[1].pos):app.root.toggle_header()
+            MyLowerTabBoxLayout:
+                id : mylowertabbox4
+                orientation: 'horizontal'
+                size_hint_y : None
+                height : 75
+
+                MyPackLabel:
+
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Read'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.read_data_back()
+                    
+                
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Insert an Image...'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.fc_popup(textinput4 )
+
+                MyTabTouchableLabel:
+                    id : tabbtnedit
+                    text: 'Edit'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos): app.root.save_data_after_editing(self)
+
+                MyPackLabel:
+                
+                
+            
+            
+    MyTabbedPanelItem:
+        id: tab5
+        markup : True
+        text: '[b][color=#f08080] Page [/color][/b] \n [color=#008b8b] - 5 - [/color]'
+        color : 0,0,0,1
+        
+        MyTabMainBoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint: (1,.9)
+                FloatLayout:
+                    MyTabLabel:
+                        id: mylabel_5
+                        text : textinput5.text 
+                        on_ref_press: app.root.open_link(*args)
+                    MyTabTextInput:
+                        id: textinput5 
+                        pos_hint: mylabel_5.pos_hint
+                        size_hint : mylabel_5.size_hint
+                        on_touch_down : if self.collide_point(*args[1].pos) : app.root.toggle_lower_box(mylowertabbox5)      
+                        on_touch_down :  if self.collide_point(*args[1].pos):app.root.toggle_header()
+            
+            MyLowerTabBoxLayout:
+                id : mylowertabbox5
+                orientation: 'horizontal'
+                size_hint_y : None
+                height : 75
+
+                MyPackLabel:
+
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Read'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.read_data_back()
+                    
+                
+                MyTabTouchableLabel:
+                    id : tabbutnread
+                    text: 'Insert an Image...'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos) : app.root.fc_popup(textinput5 )
+
+                MyTabTouchableLabel:
+                    id : tabbtnedit
+                    text: 'Edit'
+                    on_touch_down : 
+                        if self.collide_point(*args[1].pos): app.root.save_data_after_editing(self)
+
+                MyPackLabel:
+                
+      
+    MyTabbedPanelItem: 
+        id: tabtree
+        markup : True
+        text: '[b][color=#f08080] Tree [/color][/b] '
+        color : 0,0,0,1
+        
+        
+        on_touch_down : 
+            if self.collide_point(*args[1].pos):app.root.current  ='treescreen'
+        
+        BoxLayout:
+            
+            Label :
+                
+                canvas.before:
+                    Color :
+                        rgba : .52, 0.80, .92, 1 ## Sky Blue
+                    Rectangle:
+                        size : self.size
+                        pos : self.pos
+                text : 'Your go to Notes App.'
+                color : 0,0,0,1
+##<Label>:
+    ##color : 0,0,0,1
+
+
+
+<MyFCPopup>:
+    id : fc_popup
+    title : 'Choose a file'
+    size_hint : (.5,.5) 
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness
+    content: 
+    BoxLayout:
+        orientation : 'vertical'
+        BoxLayout:
+            size_hint_y : .525
+            canvas.before:
+                Color:
+                    rgba: 1,1,1,1
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [20,]  # Adjust for corner roundness
+            
+            FileChooserListView:
+                id : filechooser
+                ##rootpath : "C:\Users"
+                ##path : 
+                ##bar_width: dp(40)
+                
+                filters: ['*.png', '*.jpg', '* .jpeg', '* .gif', '*.heic']
+                ##multiselect : True
+                ##dirselect : True
+               ##on_touch_down : if self.collide_point(*args[1].pos) :app.root.file_selected(filechooser.selection)
+
+                on_touch_down:   if self.collide_point(*args[1].pos) and args[1].is_double_tap  : app.root.image_display(filechooser, self.selection)
+                
+                
+        BoxLayout:
+            orientation : 'horizontal'
+            size_hint_y : .075
+            
+            Label:
+                
+                text : 'Clicking on the file once will select it. To submit double click on it. To deselect_file, simply select another one. To dismiss the popup, click outside popup window.'
+                ##font_size: min(self.width, self.height) * 0.4
+                text_size : self.size
+                color : 1,1,1,1
+<MyImagePopup>:
+    id : image_popup 
+    title : 'Chosen Image'
+    size_hint : (.5,.5) 
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness
+    content: 
+    BoxLayout:
+        orientation : 'vertical'
+        
+        BoxLayout:
+            orientation : 'vertical'
+            BoxLayout:
+                Image:
+                    id : display_image
+                    fit_mode : 'cover'
+                
+        BoxLayout:
+            size_hint_y : .15
+           
+            Label:
+                
+                text : 'Insert'
+                color : 1,1,1,1
+                on_touch_down : if self.collide_point(*args[1].pos) : app.root.image_display()
+            Label:
+                text : 'cancel'
+                color : 1,1,1,1
+                on_touch_down : if self.collide_point(*args[1].pos) : app.root.cancel_my_image_popup()
+<MyFileRenamePopup>:
+    id : rename_popup 
+    title : 'File rename'
+    size_hint : (.4,.2) 
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness
+    content: 
+    BoxLayout:
+        orientation : 'vertical'
+        
+        BoxLayout:
+            orientation : 'vertical'
+            BoxLayout:
+                TextInput:
+                    id : file_text_rename
+                    hint_text : 'Please choose a unique file name without extention'
+                    multiline : False
+                
+        BoxLayout:
+            size_hint_y : .25
+           
+            Label:
+                
+                text : 'Rename'
+                color : 1,1,1,1
+                on_touch_down : if self.collide_point(*args[1].pos) : app.root.rename_file()
+            Label:
+                text : 'cancel'
+                color : 1,1,1,1
+                on_touch_down : if self.collide_point(*args[1].pos) : app.root.cancel_my_image_popup()
+
+
+<MyImageDisplayPopup>:
+    id : image_display_popup 
+    title : 'Chosen Image'
+    size_hint : (.5,.5) 
+    background: ""
+    background_color:0,0,0,0
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness
+    content: 
+    BoxLayout:
+        orientation : 'vertical'
+        
+        BoxLayout:
+            orientation : 'vertical'
+            BoxLayout:
+                Image:
+                    id : display_image_only
+                    fit_mode : 'cover'
+
+<MyInsertLineInfoPopup>:
+    id : info_pop_id
+    title : 'Info Label...'
+    title_color : 1, .96, .92, 1
+    size_hint :( .4, .15)
+    background: ""
+    background_color:0,0,0,0
+    autodismiss : True
+    canvas.before:
+        Color:
+            rgba: .52, 0.80, .92, 1 ## Sky Blue
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [20,]  # Adjust for corner roundness
+    content: 
+    BoxLayout:
+        orientation : 'vertical'
+    
+        Label:
+            size_hint : 1,1
+            text : 'You are trying to insert lines more than the allowed limit.'
+            text_size: self.size
+            size : self.texture_size
+            halign : 'left'
+            valign : 'center'
+           
+            color : .94, .97, 1, 1 ## Alice Blue
+            shorten :  True
+                  
